@@ -2,48 +2,66 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import mysql from 'mysql';
 
 const Signup = () => {
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isIdDuplicate, setIsIdDuplicate] = useState(false);
 
   const router = useRouter();
 
   const handleSignup = async () => {
-    // MySQL 연결 설정
-    const connection = mysql.createConnection({
-      host: '172.27.0.111',
-      user: 'admin',
-      password: '1234',
-      database: 'user_info',
+    // 아이디 중복 체크
+    const duplicateCheckResponse = await fetch('/api/check-duplicate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
     });
 
-    // MySQL 연결
-    connection.connect();
+    const duplicateCheckResult = await duplicateCheckResponse.json();
 
-    // 사용자 정보를 USER_table에 삽입
-    const queryString = `INSERT INTO USER_table (username, password) VALUES ('${username}', '${password}')`;
+    if (duplicateCheckResult.isDuplicate) {
+      setIsIdDuplicate(true);
+      return;
+    }
 
-    connection.query(queryString, (error, results, fields) => {
-      if (error) throw error;
-      console.log('User added to USER_table');
-    });
+    // 중복이 아니라면 가입 진행
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, username, password }),
+      });
 
-    // MySQL 연결 종료
-    connection.end();
-
-    // 회원가입 후 다른 페이지로 이동
-    router.push('/dashboard'); // 이동하고 싶은 페이지 경로로 수정하세요.
+      if (response.ok) {
+        console.log('User added to USER_table');
+        router.push('/');
+      } else {
+        console.error('Failed to insert user to USER_table');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+    }
   };
 
   return (
     <div>
-      <h1>회원가입 폼</h1>
+      <h1>Mini Web Hosting</h1>
       <form>
+        <label>
+          이름:
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <br />
         <label>
           아이디:
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          {isIdDuplicate && <span style={{ color: 'red' }}>이미 사용 중인 아이디입니다.</span>}
         </label>
         <br />
         <label>
