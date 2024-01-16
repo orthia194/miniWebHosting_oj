@@ -7,10 +7,10 @@ export default async function handler(req, res) {
 
   // MySQL 연결 설정
   const connection = mysql.createConnection({
-    host: '172.27.0.111',
-    user: 'admin',
-    password: '1234',
-    database: 'user_info',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
   });
 
   // MySQL 연결
