@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Header } from '../layout/header';
+import '../public/css/index.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -35,10 +37,13 @@ const Login = () => {
       setLoginError('로그인 중 오류가 발생했습니다.');
     }
   };
+  const navigateToSignup = () => {
+    router.push('/signup'); // '/signup'는 회원가입 페이지의 경로입니다.
+  };
 
   return (
     <div>
-      <h1>Mini Web Hosting - 로그인</h1>
+      <Header></Header>
       <form>
         <label>
           아이디:
@@ -52,6 +57,9 @@ const Login = () => {
         <br />
         <button type="button" onClick={handleLogin}>
           로그인
+        </button>
+        <button type="button" onClick={navigateToSignup}>
+          회원가입
         </button>
         {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
       </form>

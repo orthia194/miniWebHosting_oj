@@ -1,6 +1,7 @@
-// pages/api/signup.js
 
+import { exec } from 'child_process';
 import mysql from 'mysql';
+import fs from 'fs/promises';
 
 export default async function handler(req, res) {
   const { name, username, password } = req.body;
@@ -25,7 +26,24 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Failed to insert user to USER_table' });
     }
 
-    connection.end();
-    return res.status(200).json({ message: 'User added to USER_table' });
+    // 리눅스 계정 생성 및 디렉토리 생성
+    const userDirectory = `/home/orthia/miniWebHosting_oj/ftpd/${username}/html/www`;
+
+
+      fs.mkdir(userDirectory, { recursive: true })
+        .then(() => {
+          connection.end();
+          return res.status(200).json({ message: 'USER_table에 사용자 추가 및 디렉토리 생성 성공' });
+        })
+        .catch((mkdirError) => {
+          connection.end();
+          return res.status(500).json({ message: '디렉토리 생성 실패', error: mkdirError.message });
+        });
+        exec(`sudo adduser ${username}`, (addUserError, addUserStdout, addUserStderr) => {
+          if (addUserError) {
+            connection.end();
+            return res.status(500).json({ message: '사용자 계정 생성 실패', error: addUserError.message });
+          }
+    });
   });
 }

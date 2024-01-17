@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Header } from '../layout/header'
+import '../public/css/index.css';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -40,7 +42,7 @@ const Signup = () => {
 
       if (response.ok) {
         console.log('User added to USER_table');
-        router.push('/');
+        router.push('/login');
       } else {
         console.error('Failed to insert user to USER_table');
       }
@@ -51,7 +53,7 @@ const Signup = () => {
 
   return (
     <div>
-      <h1>Mini Web Hosting</h1>
+      <Header></Header>
       <form>
         <label>
           이름:
