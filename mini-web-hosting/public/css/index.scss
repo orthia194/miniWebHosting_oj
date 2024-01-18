@@ -6,3 +6,18 @@
 a{
     text-decoration: none;
 }
+// pages/usertable.js
+.user_table_box{
+        li{
+            width: 50%;
+
+            span{
+                box-sizing: border-box;
+                display: inline-flex;
+                width: 30%;
+            }
+            span:nth-of-type(1){
+                text-align: center;
+            }
+        }
+}

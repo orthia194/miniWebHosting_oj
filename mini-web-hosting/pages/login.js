@@ -22,10 +22,12 @@ const Login = () => {
         },
         body: JSON.stringify({ username, password }),
       });
-
+      const data = await response.json();
+      console.log(data.token);
       if (response.ok) {
         // 로그인이 성공하면 성공 메시지를 출력하고, 다른 페이지로 이동할 수 있습니다.
         console.log('Login successful!');
+        
         router.push('/');
       } else {
         // 로그인이 실패하면 에러 메시지를 출력합니다.
@@ -40,6 +42,7 @@ const Login = () => {
   const navigateToSignup = () => {
     router.push('/signup'); // '/signup'는 회원가입 페이지의 경로입니다.
   };
+  
 
   return (
     <div>
