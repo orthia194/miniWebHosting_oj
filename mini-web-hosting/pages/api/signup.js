@@ -28,9 +28,8 @@ export default async function handler(req, res) {
 
     // 리눅스 계정 생성 및 디렉토리 생성
     const userDirectory = `/home/orthia/miniWebHosting_oj/ftpd/${username}/html/www`;
-
-
       fs.mkdir(userDirectory, { recursive: true })
+      
         .then(() => {
           connection.end();
           return res.status(200).json({ message: 'USER_table에 사용자 추가 및 디렉토리 생성 성공' });
@@ -44,6 +43,7 @@ export default async function handler(req, res) {
             connection.end();
             return res.status(500).json({ message: '사용자 계정 생성 실패', error: addUserError.message });
           }
+          
     });
   });
 }

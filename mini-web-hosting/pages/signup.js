@@ -13,6 +13,8 @@ const Signup = () => {
 
   const router = useRouter();
 
+
+
   const handleSignup = async () => {
     // 아이디 중복 체크
     const duplicateCheckResponse = await fetch('/api/check-duplicate', {
@@ -22,16 +24,17 @@ const Signup = () => {
       },
       body: JSON.stringify({ username }),
     });
-
+  
     const duplicateCheckResult = await duplicateCheckResponse.json();
-
+  
     if (duplicateCheckResult.isDuplicate) {
       setIsIdDuplicate(true);
       return;
     }
-
+  
     // 중복이 아니라면 가입 진행
     try {
+      console.log('Before fetch signup API');
       const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
@@ -39,12 +42,14 @@ const Signup = () => {
         },
         body: JSON.stringify({ name, username, password }),
       });
-
+      console.log('After fetch signup API');
+  
       if (response.ok) {
         console.log('User added to USER_table');
+        console.log(router);
         router.push('/login');
       } else {
-        console.error('Failed to insert user to USER_table');
+        console.error('Failed to insert user to USER_table. Status:', response.status);
       }
     } catch (error) {
       console.error('Error during signup:', error);

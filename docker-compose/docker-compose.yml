@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  nginx:
+    image: mynginx:0.2
+    ports:
+      - "80:10001"
+    volumes:
+      - /home/orthia/miniWebHosting_oj/ftpd/test/html/www/:/rootfs/etc/nginx/html/

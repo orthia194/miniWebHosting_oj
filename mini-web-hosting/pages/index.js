@@ -40,11 +40,26 @@ const Home = () => {
       .catch((error) => console.error('도커 컨테이너 시작 중 오류 발생:', error));
   };
 
+  const startdocker = async () => {
+    try {
+      const response = await fetch('/api/newfile');
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result); // API에서 반환된 결과
+      } else {
+        console.error('Failed to call the API');
+      }
+    } catch (error) {
+      console.error('An error occurred while calling the API', error);
+    }
+  };
+
   return (
     <div>
       <Header />
-      <button onClick={startDockerContainer}>도커 컨테이너 시작</button>
+      <button onClick={startdocker}>도커 컨테이너 시작</button>
       <p>Docker Container Status: {dockerContainerStatus}</p>
+      
     </div>
   );
 };
