@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Header } from '../layout/header';
+import { fetchUserInfo,handleLogout  } from './import/userinfo';
 import '../public/css/index.css';
 
 const Home = () => {
@@ -8,40 +9,18 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // 저장된 토큰을 가져옵니다.
     const storedToken = localStorage.getItem('token');
-
-    // 저장된 토큰이 있을 경우 서버에 전송하여 사용자 정보를 가져옵니다.
     if (storedToken) {
-      fetchUserInfo(storedToken);
+      fetchUserInfo(storedToken).then((data) => {
+        if (data) {
+          setUserInfo(data);
+        }
+      });
     }
   }, []);
 
-  const fetchUserInfo = async (token) => {
-    try {
-      const response = await fetch('/api/userinfo', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response);
-      if (response.ok) {
-        const data = await response.json();
-        setUserInfo(data); // 사용자 정보를 상태에 저장합니다.
-      } else {
-        console.error('사용자 정보 가져오기 실패');
-      }
-    } catch (error) {
-      console.error('사용자 정보 가져오기 중 오류 발생:', error);
-    }
-  };
-
-  const handleLogout = () => {
-
-    localStorage.removeItem('token');
-    setUserInfo(null);
-    router.push('/login');
+  const handleLogoutOnOtherPage = () => {
+    handleLogout(setUserInfo, router);
   };
 
   const startdocker = async () => {
@@ -60,7 +39,7 @@ const Home = () => {
 
 return (
     <div>
-      <Header userInfo={userInfo} onLogout={handleLogout} />
+      <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
       {userInfo ? (
         <div>
           <button onClick={startdocker}>도커 컨테이너 시작</button>

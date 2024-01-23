@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Header } from '../layout/header';
+import { fetchUserInfo } from './import/userinfo';
 import '../public/css/index.css';
 
 const Home = () => {
@@ -16,26 +17,6 @@ const Home = () => {
       fetchUserInfo(storedToken);
     }
   }, []);
-
-  const fetchUserInfo = async (token) => {
-    try {
-      const response = await fetch('/api/userinfo', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserInfo(data); // 사용자 정보를 상태에 저장합니다.
-      } else {
-        console.error('사용자 정보 가져오기 실패');
-      }
-    } catch (error) {
-      console.error('사용자 정보 가져오기 중 오류 발생:', error);
-    }
-  };
 
   const handleLogout = () => {
     // 로그아웃 시 토큰을 삭제하고 사용자 정보를 초기화합니다.
@@ -60,11 +41,10 @@ const Home = () => {
 
   return (
     <div>
-      <Header />
+      <Header userInfo={userInfo} onLogout={handleLogout} />
       {userInfo ? (
         <div>
-          <p>안녕하세요, {userInfo.username}님!</p>
-          <button onClick={handleLogout}>로그아웃</button>
+          <button onClick={startdocker}>도커 컨테이너 시작</button>
         </div>
       ) : (
         <p>로그인이 필요합니다.</p>

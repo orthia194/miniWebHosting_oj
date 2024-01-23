@@ -1,9 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Header } from '../layout/header';
+import { fetchUserInfo,handleLogout  } from './import/userinfo';
 import '../public/css/index.css';
 
 export default function Usertable() {
   const [userList, setUserList] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      fetchUserInfo(storedToken).then((data) => {
+        if (data) {
+          setUserInfo(data);
+        }
+      });
+    }
+  }, []);
+
+  const handleLogoutOnOtherPage = () => {
+    handleLogout(setUserInfo, router);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +76,7 @@ const deleteUserOnLinux = async (username) => {
 
   return (
     <div>
-      <Header />
+      <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
       <h1>User Table</h1>
       <ul className="user_table_box">
         <li>
