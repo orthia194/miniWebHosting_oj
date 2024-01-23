@@ -6,6 +6,6 @@ services:
     volumes:
     - ./../ftpd/test/html/www:/usr/share/nginx/html/
     ports:
-    - "10746:80"
+    - "10322:80"
     environment:
     - NGINX_PORT=80

@@ -1,5 +1,3 @@
-// pages/login.js
-
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Header } from '../layout/header';
@@ -13,8 +11,6 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      // 여기에서 실제 로그인 처리를 수행합니다.
-      // 아이디와 비밀번호를 서버로 전송하고, 로그인 성공 여부를 확인합니다.
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -23,26 +19,25 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
-      console.log(data.token);
+
       if (response.ok) {
-        // 로그인이 성공하면 성공 메시지를 출력하고, 다른 페이지로 이동할 수 있습니다.
-        console.log('Login successful!');
-        
+        // 토큰을 로컬 스토리지에 저장합니다.
+        localStorage.setItem('token', data.token);
+        console.log('로그인 성공!');
         router.push('/');
       } else {
-        // 로그인이 실패하면 에러 메시지를 출력합니다.
-        console.error('Login failed');
+        console.error('로그인 실패');
         setLoginError('로그인에 실패하였습니다. 아이디와 비밀번호를 확인하세요.');
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('로그인 중 오류 발생:', error);
       setLoginError('로그인 중 오류가 발생했습니다.');
     }
   };
+
   const navigateToSignup = () => {
-    router.push('/signup'); // '/signup'는 회원가입 페이지의 경로입니다.
+    router.push('/signup');
   };
-  
 
   return (
     <div>

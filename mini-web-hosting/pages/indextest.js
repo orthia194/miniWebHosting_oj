@@ -25,7 +25,7 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data); // 사용자 정보를 상태에 저장합니다.
@@ -38,7 +38,7 @@ const Home = () => {
   };
 
   const handleLogout = () => {
-
+    // 로그아웃 시 토큰을 삭제하고 사용자 정보를 초기화합니다.
     localStorage.removeItem('token');
     setUserInfo(null);
     router.push('/login');
@@ -58,12 +58,13 @@ const Home = () => {
     }
   };
 
-return (
+  return (
     <div>
-      <Header userInfo={userInfo} onLogout={handleLogout} />
+      <Header />
       {userInfo ? (
         <div>
-          <button onClick={startdocker}>도커 컨테이너 시작</button>
+          <p>안녕하세요, {userInfo.username}님!</p>
+          <button onClick={handleLogout}>로그아웃</button>
         </div>
       ) : (
         <p>로그인이 필요합니다.</p>

@@ -12,12 +12,13 @@ const startdocker = () => {
     const originalYamlFile = "../docker-compose/test.yml";
 
     // 새로운 YAML 파일 이름 동적 생성
-    const newYamlFile = `your_new_yaml_file_${randomPort}.yml`;
+    const newYamlFile = `../docker-compose/your_new_yaml_file_${randomPort}.yml`;
 
     // 확인할 포트가 이미 사용 중인지 확인
     try {
       execSync(`lsof -i :${randomPort}`);
       console.log(`포트 ${randomPort}가 이미 사용 중입니다. 다른 포트 시도 중...`);
+      return randomPort;
     } catch (error) {
       // 기존 YAML 파일을 읽어와 내용을 수정한 후, 새로운 파일로 저장
       const yamlContent = fs.readFileSync(originalYamlFile, 'utf-8');
