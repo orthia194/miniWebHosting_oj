@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  web:
+  web_10874:
     image: mynginx:0.2
     volumes:
-    - ./../ftpd/hoo/html/www:/usr/share/nginx/html/
+    - ./../ftpd/rrrr/html/www:/usr/share/nginx/html/
     ports:
-    - "10049:80"
+    - "10874:80"
     environment:
     - NGINX_PORT=80

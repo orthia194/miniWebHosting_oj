@@ -73,26 +73,33 @@ const deleteUserOnLinux = async (username) => {
     console.error('리눅스 계정 삭제 중 오류 발생:', error);
   }
 };
-
   return (
     <div>
       <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
       <h1>User Table</h1>
-      <ul className="user_table_box">
-        <li>
-          <span>Name</span>
-          <span>ID</span>
-          <span>PW</span>
+      {userInfo && userInfo.username === 'admin' ? (
+  <ul className="user_table_box">
+    <li>
+      <span>Name</span>
+      <span>ID</span>
+      <span>PW</span>
+      <span>Port</span>
+    </li>
+    {userList.map((user, index) => (
+      user.id !== 'admin' && (
+        <li key={index}>
+          <span>{user.name}</span>
+          <span>{user.id}</span>
+          <span>{user.pw}</span>
+          <span>{user.port}</span>
+          <button onClick={() => handleDeleteUser(user.id, user.id)}>삭제</button>
         </li>
-        {userList.map((user, index) => (
-          <li key={index}>
-            <span>{user.name}</span>
-            <span>{user.id}</span>
-            <span>{user.pw}</span>
-            <button onClick={() => handleDeleteUser(user.id, user.id)}>삭제</button>
-          </li>
-        ))}
-      </ul>
+      )
+    ))}
+  </ul>
+) : (
+  <p>관리자 계정이 아닙니다</p>
+)}
     </div>
   );
 }

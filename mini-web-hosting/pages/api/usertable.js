@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   connection.connect();
 
   // 사용자 정보를 USER_table에서 가져오기
-  const queryString = 'SELECT name, id, pw FROM USER_table';
+  const queryString = 'SELECT name, id, pw, port FROM USER_table';
 
   connection.query(queryString, (error, results, fields) => {
     connection.end();
