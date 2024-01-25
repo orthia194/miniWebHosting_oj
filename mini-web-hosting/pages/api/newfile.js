@@ -26,7 +26,7 @@ const startdocker = (req, res) => {
     const originalYamlFile = "../docker-compose/original.yml";
 
     // 새로운 YAML 파일 이름 동적 생성
-    const newYamlFile = `../docker-compose/${username}_nginx_${randomPort}.yml`;
+    const newYamlFile = `../ftpd/${username}/nginx_${randomPort}.yml`;
 
     // 확인할 포트가 이미 사용 중인지 확인
     try {
