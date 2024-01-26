@@ -7,6 +7,24 @@ const startdocker = (req, res) => {
   const username = req.query.username;
   const { userId } = req.body;
 
+  // Docker Compose 파일 경로
+  const dockerComposeFilePath = `../ftpd/${username}/docker-compose.yml`;
+
+  // 도커 컴포즈 파일 확인
+  if (fs.existsSync(dockerComposeFilePath)) {
+    console.log(`기존에 ${dockerComposeFilePath}이(가) 존재합니다. 종료 후 삭제합니다.`);
+
+    // Docker Compose를 사용하여 컨테이너 종료
+    execSync(`docker-compose -f ${dockerComposeFilePath} down`);
+
+    // 파일 삭제
+    fs.unlinkSync(dockerComposeFilePath);
+
+    console.log(`${dockerComposeFilePath}을(를) 삭제했습니다.`);
+  } else {
+    console.log(`${dockerComposeFilePath}이(가) 존재하지 않습니다. 계속 진행합니다.`);
+  }
+
   // MySQL 연결 설정
   const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -26,7 +44,7 @@ const startdocker = (req, res) => {
     const originalYamlFile = "../docker-compose/original.yml";
 
     // 새로운 YAML 파일 이름 동적 생성
-    const newYamlFile = `../ftpd/${username}/nginx_${randomPort}.yml`;
+    const newYamlFile = `../ftpd/${username}/docker-compose.yml`;
 
     // 확인할 포트가 이미 사용 중인지 확인
     try {
@@ -46,11 +64,9 @@ const startdocker = (req, res) => {
       // 포트 번호를 동적으로 변경
       const finalYamlContent = updatedYamlContent.replace(/- "10001:80"/, `- "${randomPort}:80"`);
 
-      const volumeContent = finalYamlContent.replace(/test/g, `${username}`)
-      fs.writeFileSync(newYamlFile, volumeContent);
+      // const volumeContent = finalYamlContent.replace(/test/g, `${username}`)
+      fs.writeFileSync(newYamlFile, finalYamlContent);
       const updateport = `UPDATE USER_table SET port = ${randomPort} WHERE id = '${userId}'`;
-
-
 
       // MySQL에서 UPDATE 실행
       connection.query(updateport, (error, results) => {

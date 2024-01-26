@@ -57,7 +57,7 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className='main'>
       <Header></Header>
       <form>
         <label>

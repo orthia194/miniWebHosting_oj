@@ -81,8 +81,16 @@ const Home = () => {
   Dockerport();
   console.log(userPort)
 
+  const pagereload = async () => {
+    try {
+      StartDocker();
+      router.reload();
+    } catch (error) {
+      console.error('아 에러야', error);
+    }
+  };
   return (
-    <div>
+    <div className='main'>
       <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
       {userInfo ? (
         <div>
@@ -90,11 +98,13 @@ const Home = () => {
             <Link href="/usertable">관리자페이지</Link>
           ) : (
             <div>
-              <button onClick={StartDocker}>도커 컨테이너 시작</button>
-              {userPort !== null ? (
-                <Link href={`http://210.106.106.47:${userPort}`}>도커 페이지</Link>
+              {userPort !== null && userPort !== 'none' ? (
+                <div>
+                  <Link href={`/${userPort}`}>나의 홈페이지 구경가기</Link>
+                  <Link href="/howtouse">나의 홈페이지 올리는 방법</Link>
+                </div>
               ) : (
-                <p>Loading...</p>
+                <button onClick={pagereload}>나의 홈페이지 만들기</button>
               )}
             </div>
           )}

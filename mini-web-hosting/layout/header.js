@@ -9,9 +9,8 @@ export function Header({ userInfo, onLogout }) {
       <h1><Link href="/">Mini Web Hosting</Link></h1>
       {userInfo ? (
         <>
-          <p>안녕하세요, {userInfo.username}님!</p><br></br>
-          
-          <button onClick={onLogout}>로그아웃</button><br></br>
+          <p>안녕하세요, {userInfo.username}님!</p>
+          <button onClick={onLogout}>로그아웃</button>
         </>
       ) : (
         <>

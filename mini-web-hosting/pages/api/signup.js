@@ -5,6 +5,13 @@ import fs from 'fs/promises';
 export default async function handler(req, res) {
   const { name, username, password } = req.body;
 
+  const restrictedUsernames = ["root", "admin", "daemon", "bin", "sys", "sync", "games", "man", "lp", "mail", "news", "uucp", "proxy", "www", "backup", "list", "irc", "gnats", "nobody", "systemd-network", "systemd-resolve", "systemd-timesync", "messagebus", "syslog", "_apt", "tss", "uuidd", "tcpdump", "landscape", "pollinate", "usbmux", "sshd", "systemd-coredump", "cloud", "lxd", "ubuntu", "ntp", "orthia", "jyh", "ftp", "fwupd-refresh", "_rpc", "statd"].map(name => name.toLowerCase());
+
+  // 제공된 사용자 이름이 제한 목록에 있는지 확인 (대소문자 구분 없이)
+  if (restrictedUsernames.includes(username.toLowerCase())) {
+    return res.status(400).json({ message: '사용할 수 없는 사용자 이름입니다' });
+  }
+
   // MySQL 연결 설정
   const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -26,7 +33,7 @@ export default async function handler(req, res) {
     }
 
     // 사용자 생성 명령어 (adduser 또는 useradd) 실행
-    exec(`sudo useradd ${username}`, (createUserError, createUserStdout, createUserStderr) => {
+    exec(`sudo useradd -m ${username}`, (createUserError, createUserStdout, createUserStderr) => {
       if (createUserError) {
         connection.end();
         return res.status(500).json({ message: '사용자 계정 생성 실패', error: createUserError.message });
@@ -43,8 +50,17 @@ export default async function handler(req, res) {
         const userDirectory = `/home/orthia/miniWebHosting_oj/ftpd/${username}/html/www`;
         fs.mkdir(userDirectory, { recursive: true })
           .then(() => {
-            connection.end();
-            return res.status(200).json({ message: '사용자 계정 및 비밀번호 설정 성공' });
+            // 생성된 디렉토리에 chown ${username}:orthia 적용
+            const chownCommand = `sudo chown ${username}:orthia ${userDirectory}`;
+            exec(chownCommand, (chownError, chownStdout, chownStderr) => {
+              if (chownError) {
+                connection.end();
+                return res.status(500).json({ message: 'chown 설정 실패', error: chownError.message });
+              }
+
+              connection.end();
+              return res.status(200).json({ message: '사용자 계정 및 비밀번호 설정 성공' });
+            });
           })
           .catch((mkdirError) => {
             connection.end();
