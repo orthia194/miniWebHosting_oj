@@ -6,16 +6,17 @@ export function Header({ userInfo, onLogout }) {
   
   return (
     <div className="header">
-      <h1><Link href="/">Mini Web Hosting</Link></h1>
+      <div><h1><Link href="/">Mini Web Hosting</Link></h1></div>
+      
       {userInfo ? (
         <>
-          <p>안녕하세요, {userInfo.username}님!</p>
-          <button onClick={onLogout}>로그아웃</button>
+        <div><p>{userInfo.username}님</p></div>
+        <div><button onClick={onLogout}>로그아웃</button></div>
         </>
       ) : (
         <>
-          <Link href="/login">로그인</Link>
-          <Link href="/signup">회원가입</Link>
+        <div><Link href="/login">로그인</Link></div>
+        <div><Link href="/signup">회원가입</Link></div>
         </>
       )}
       

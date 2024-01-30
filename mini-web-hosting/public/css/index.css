@@ -1,20 +1,84 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
 }
 
 a {
+  color: #333;
   text-decoration: none;
 }
 
-.user_table_box li {
-  width: 50%;
+li {
+  list-style: none;
 }
-.user_table_box li span {
+
+#__next {
+  padding: 5% 0;
+}
+
+.main {
+  width: 60%;
+  margin: 0 auto;
+  padding: 2%;
+  display: block;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #333;
+  border-radius: 25px;
+}
+.main .header {
+  display: flex;
+  margin-bottom: 10%;
+}
+.main .header div:nth-of-type(1) {
+  margin: 0 auto;
+}
+.main .header div:nth-of-type(2), .main .header div:nth-of-type(3) {
+  margin-left: 2.5%;
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+}
+.main .main_mini_web_hosting_login,
+.main .main_mini_web_hosting_adminpage {
+  display: flex;
+}
+.main .main_mini_web_hosting_login div,
+.main .main_mini_web_hosting_adminpage div {
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+  border: 1px solid #333;
+}
+.main .main_mini_web_hosting_login div a,
+.main .main_mini_web_hosting_adminpage div a {
+  width: 100%;
+  height: 100%;
+  padding: 5% 0;
+  text-align: center;
+  display: inline-block;
+}
+.main .main_mini_web_hosting_login_clear div {
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+  border: 1px solid #333;
+  margin-bottom: 1%;
+}
+.main .main_mini_web_hosting_login_clear div a {
+  width: 100%;
+  height: 100%;
+  padding: 5% 0;
+  text-align: center;
+  display: inline-block;
+}
+.main .user_table_box li {
+  width: 100%;
+}
+.main .user_table_box li span {
   box-sizing: border-box;
   display: inline-flex;
   width: 22%;
-}
-.user_table_box li span:nth-of-type(1) {
-  text-align: center;
+  justify-content: center;
 }/*# sourceMappingURL=index.css.map */

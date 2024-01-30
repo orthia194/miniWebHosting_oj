@@ -95,13 +95,15 @@ const Home = () => {
       {userInfo ? (
         <div>
           {userInfo.username === 'admin' ? (
-            <Link href="/usertable">관리자페이지</Link>
+            <div className='main_mini_web_hosting_adminpage'>
+              <div><Link href="/usertable">Mini Web Hosting adminpage</Link></div>
+            </div>
           ) : (
             <div>
               {userPort !== null && userPort !== 'none' ? (
-                <div>
-                  <Link href={`/${userPort}`}>나의 홈페이지 구경가기</Link>
-                  <Link href="/howtouse">나의 홈페이지 올리는 방법</Link>
+                <div className='main_mini_web_hosting_login_clear'>
+                  <div><Link href={`/${userPort}`}>나의 홈페이지 구경가기</Link></div>
+                  <div><Link href="/howtouse">나의 홈페이지 올리는 방법</Link></div>
                 </div>
               ) : (
                 <button onClick={pagereload}>나의 홈페이지 만들기</button>
@@ -110,7 +112,10 @@ const Home = () => {
           )}
         </div>
       ) : (
-        <p>로그인이 필요합니다.</p>
+        <div className='main_mini_web_hosting_login'>
+          <div><Link href="/login">Mini Web Hosting Login</Link></div>
+        </div>
+
       )}
     </div>
   );
