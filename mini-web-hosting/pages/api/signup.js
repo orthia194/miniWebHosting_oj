@@ -1,9 +1,12 @@
 import { exec } from 'child_process';
 import mysql from 'mysql';
 import fs from 'fs/promises';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
   const { name, username, password } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10); // 두 번째 인수는 해싱 솔트의 수
 
   const restrictedUsernames = ["root", "admin", "daemon", "bin", "sys", "sync", "games", "man", "lp", "mail", "news", "uucp", "proxy", "www", "backup", "list", "irc", "gnats", "nobody", "systemd-network", "systemd-resolve", "systemd-timesync", "messagebus", "syslog", "_apt", "tss", "uuidd", "tcpdump", "landscape", "pollinate", "usbmux", "sshd", "systemd-coredump", "cloud", "lxd", "ubuntu", "ntp", "orthia", "jyh", "ftp", "fwupd-refresh", "_rpc", "statd"].map(name => name.toLowerCase());
 
@@ -24,7 +27,7 @@ export default async function handler(req, res) {
   connection.connect();
 
   // 사용자 정보를 USER_table에 삽입
-  const queryString = `INSERT INTO USER_table (name, id, pw, port) VALUES ('${name}', '${username}', '${password}', 'none')`;
+  const queryString = `INSERT INTO USER_table (name, id, pw, port) VALUES ('${name}', '${username}', '${hashedPassword}', 'none')`;
 
   connection.query(queryString, (error, results, fields) => {
     if (error) {

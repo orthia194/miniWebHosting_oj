@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 require('dotenv').config(); // .env 파일 로드
 
 export default async function handler(req, res) {
@@ -17,8 +18,8 @@ export default async function handler(req, res) {
 
   connection.connect();
 
-  const queryString = `SELECT * FROM USER_table WHERE id = ? AND pw = ?`;
-  connection.query(queryString, [username, password], (error, results, fields) => {
+  const queryString = `SELECT id, pw FROM USER_table WHERE id = ?`;
+  connection.query(queryString, [username], async (error, results, fields) => {
     if (error) {
       connection.end();
       return res.status(500).json({ message: 'Error during login' });
@@ -26,7 +27,9 @@ export default async function handler(req, res) {
 
     connection.end();
 
-    if (results.length > 0) {
+    const user = results[0];
+    const isPasswordMatch = await bcrypt.compare(password, user.pw);
+    if (isPasswordMatch) {
       const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
       return res.status(200).json({ message: 'Login successful', token });
     } else {

@@ -37,6 +37,7 @@ export default function Usertable() {
 
     fetchData();
   }, []);
+  
 
   const handleDeleteUser = async (userId, linuxUsername) => {
     try {
