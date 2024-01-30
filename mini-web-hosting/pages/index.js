@@ -16,7 +16,6 @@ const Home = () => {
       fetchUserInfo(storedToken).then((data) => {
         if (data) {
           setUserInfo(data);
-          Dockerport(data.username);
         }
       });
     }
@@ -26,7 +25,7 @@ const Home = () => {
     handleLogout(setUserInfo, router);
   };
 
-  const Dockerport = async (username) => {
+  const Dockerport = async () => {
     try {
       const response = await fetch(`/api/check-id-port`, {
         method: 'POST',
@@ -34,7 +33,7 @@ const Home = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
+          username: userInfo.username,
         }),
       });
 
@@ -79,16 +78,17 @@ const Home = () => {
       console.error('An error occurred while calling the API', error);
     }
   };
+  Dockerport();
+  console.log(userPort)
 
   const pagereload = async () => {
     try {
-      await StartDocker();
+      StartDocker();
       router.reload();
     } catch (error) {
       console.error('아 에러야', error);
     }
   };
-
   return (
     <div className='main'>
       <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
@@ -115,6 +115,7 @@ const Home = () => {
         <div className='main_mini_web_hosting_login'>
           <div><Link href="/login">Mini Web Hosting Login</Link></div>
         </div>
+
       )}
     </div>
   );
