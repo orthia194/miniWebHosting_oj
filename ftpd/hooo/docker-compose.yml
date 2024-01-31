@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web_10450:
+    image: mynginx:0.2
+    volumes:
+    - ./html/www:/usr/share/nginx/html/
+    ports:
+    - "10450:80"
+    environment:
+    - NGINX_PORT=80

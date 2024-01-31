@@ -1,10 +1,6 @@
-// pages/api/check-duplicate.js
-
 import mysql from 'mysql';
 
 export default async function handler(req, res) {
-  const { username } = req.body;
-
   // MySQL 연결 설정
   const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -16,17 +12,16 @@ export default async function handler(req, res) {
   // MySQL 연결
   connection.connect();
 
-  // 사용자 아이디 중복 체크
-  const queryString = `SELECT * FROM USER_table WHERE id = '${username}'`;
+  // 사용자 정보를 USER_table에서 가져오기
+  const queryString = 'SELECT name, id, pw, port FROM USER_table';
 
   connection.query(queryString, (error, results, fields) => {
+    connection.end();
+
     if (error) {
-      connection.end();
-      return res.status(500).json({ message: 'Error checking duplicate username' });
+      return res.status(500).json({ message: 'Failed to fetch user data from USER_table' });
     }
 
-    connection.end();
-    const isDuplicate = results.length > 0;
-    return res.status(200).json({ isDuplicate });
+    return res.status(200).json(results);
   });
 }
