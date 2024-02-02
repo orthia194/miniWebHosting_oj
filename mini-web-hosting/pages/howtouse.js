@@ -27,12 +27,12 @@ const HowToUse = () => {
   return (
     <div className='main'>
       <Header userInfo={userInfo} onLogout={handleLogoutOnOtherPage} />
-      <div>사용방법!</div>
+      <div>사용방법! ftp = 210.106.106.47:21</div>
       <div>
-        <Image src="/images/1.PNG" alt="My Image" width={500} height={300} />
-        <Image src="/images/2.PNG" alt="My Image" width={500} height={300} />
-        <Image src="/images/3.PNG" alt="My Image" width={500} height={300} />
-        <Image src="/images/4.PNG" alt="My Image" width={500} height={300} />
+        <Image src="/images/1.PNG" alt="My Image" layout="responsive" width={1} height={1} />
+        <Image src="/images/2.PNG" alt="My Image" layout="responsive" width={1} height={1} />
+        <Image src="/images/3.PNG" alt="My Image" layout="responsive" width={1} height={1} />
+        <Image src="/images/4.PNG" alt="My Image" layout="responsive" width={1} height={1} />
       </div>
     </div>
   );
